@@ -542,7 +542,7 @@
                     }
                 </style>
                 <div class="esconder">
-                <a href="https://ssl.clickbank.net/order/orderform.html?time=1670500277&vvvv=7175696e64657265&cbpf=DOF_split&cbitems=1&vvar=cbitems%3D1%26cbpf%3DDOF_split&corid=cff61dfa-8f14-463a-a47e-47ea487f3abb" target="_blank" class="btn button-pWyRmY6545268-element zooming">
+                <a href="http://1.quindere.pay.clickbank.net/?cbskin=39878" target="_blank" class="btn button-pWyRmY6545268-element zooming">
                     I WANT GET PAID FOR LISTENING TO MUSIC $47
 </a>
             </div>
@@ -570,7 +570,7 @@
                         }
                     }
                 </style>
-                <a class="hyperlink-1657814165233XBbbd5-element" href="https://ssl.clickbank.net/order/orderform.html?time=1670500277&vvvv=7175696e64657265&cbpf=DOF_split&cbitems=1&vvar=cbitems%3D1%26cbpf%3DDOF_split&corid=cff61dfa-8f14-463a-a47e-47ea487f3abb" target="_blank" rel="nofollow">
+                <a class="hyperlink-1657814165233XBbbd5-element" href="http://1.quindere.pay.clickbank.net/?cbskin=39878" target="_blank" rel="nofollow">
                     <u>Buy now!<u>
 </u></u>
                 </a><u><u>
@@ -679,51 +679,57 @@
         </div>
     </div>
     <style>
-        .pand {
-            display: none
-        }
-    </style>
-    <script>
-        const SECONDS_TO_DISPLAY = 395;
-        const CLASS_TO_DISPLAY = 'panda';
-        const IFRAME_ID = 'panda-877e5b8a-8e03-41c4-87f6-82859affa'
-        const API_ENDPOINT = 'https://player.pandavideo.com.br/api.v2.js'
+.esconder {
+display: none
+}
+</style>
+<script type="text/javascript">
+    window.onload = function() {
+        /* ALTERE O VALOR 10 PARA OS SEGUNDOS EM QUE AS SEÇÕES VÃO APARECER */
+        var SECONDS_TO_DISPLAY = 395;
+        var CLASS_TO_DISPLAY = ".esconder";
 
-        if (!document.querySelector(`script[src='${API_ENDPOINT}']`)) {
-            let s = document.createElement('script');
-            s.src = API_ENDPOINT;
-            s.async = true;
-            document.head.appendChild(s);
+        /* DAQUI PARA BAIXO NAO PRECISA ALTERAR */
+        var attempts = 0;
+        var elsHiddenList = [];
+        var elsDisplayed = false;
+        var elsHidden = document.querySelectorAll(CLASS_TO_DISPLAY);
+        var alreadyElsDisplayed = localStorage.getItem('alreadyElsDisplayed');
+
+        setTimeout(function() {
+            elsHiddenList = Array.prototype.slice.call(elsHidden);
+        }, 0);
+
+        var showEls = function() {
+            elsDisplayed = true;
+            elsHiddenList.forEach((e) => e.style.display = "block");
+            localStorage.setItem('alreadyElsDisplayed', true)
         }
 
-        window.pandascripttag = window.pandascripttag || [];
-        window.pandascripttag.push(function() {
-            const p = new PandaPlayer(IFRAME_ID, {
-                onReady() {
-                    const el = document.querySelectorAll(`.${CLASS_TO_DISPLAY}`);
-                    p.onEvent(e => {
-                        const type = e.message
-                        if (type === 'panda_timeupdate') {
-                            const {
-                                currentTime,
-                                isMutedIndicator
-                            } = e;
-                            if (isMutedIndicator) return;
-                            if (currentTime < SECONDS_TO_DISPLAY) {
-                                el.forEach(e => {
-                                    e.style.display = 'none'
-                                })
-                            } else if (currentTime > SECONDS_TO_DISPLAY) {
-                                el.forEach(e => {
-                                    e.style.display = 'block'
-                                })
-                            }
-                        }
-                    })
-                }
-            });
-        })
-    </script>
+        var startWatchVideoProgress = function() {
+            if (typeof smartplayer === 'undefined' && !(smartplayer.instances && smartplayer.instances.length)) {
+                attempts += 1;
+                if (attempts >= 10) return;
+                return setTimeout(function() {
+                    startWatchVideoProgress()
+                }, 1000);
+            }
+
+            smartplayer.instances[0].on('timeupdate', () => {
+                if (elsDisplayed || smartplayer.instances[0].video.currentTime < SECONDS_TO_DISPLAY) return;
+                showEls();
+            })
+        }
+
+        if (alreadyElsDisplayed === 'true') {
+            setTimeout(function() {
+                showEls();
+            }, 100);
+        } else {
+            startWatchVideoProgress()
+        }
+    }
+</script>
 
 </body>
 
